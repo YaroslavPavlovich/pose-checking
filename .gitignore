@@ -1,0 +1,7 @@
+/.idea/
+/venv/
+*.mp4
+*.avi
+*.log
+*.pt
+/results/
