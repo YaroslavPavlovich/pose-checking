@@ -52,7 +52,7 @@ def main(opt):
     train_data = torch.tensor(train_data, dtype=torch.float32).view(len(train_data), -1)
     train_labels = torch.tensor(train_labels, dtype=torch.float32)
     # Train model
-    train_model(model_points, train_data, train_labels, epochs=100)
+    train_model(model_points, train_data, train_labels, epochs=300)
     model_scripted = torch.jit.script(model_points)  # Export to TorchScript
     model_scripted.save(opt.result_model)  # Save
 

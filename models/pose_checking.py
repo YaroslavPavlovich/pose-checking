@@ -21,7 +21,7 @@ class PoseChecking(nn.Module):
 
 
 def train_model(model, train_data, train_labels, epochs):
-    criterion = nn.BCELoss()
+    criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
     for epoch in range(epochs):
