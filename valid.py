@@ -68,13 +68,9 @@ def main(opt):
     negative = 0
     positive = 0
     normal, not_normal = count_answers(model_points, normal_points)
-    print(normal)
-    print(not_normal)
     positive += normal
     negative += not_normal
     normal, not_normal = count_answers(model_points, not_normal_points)
-    print(normal)
-    print(not_normal)
     positive += not_normal
     negative += normal
     accuracy = positive / (positive + negative)
