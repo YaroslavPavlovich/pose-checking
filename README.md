@@ -1,7 +1,7 @@
 # pose-checking
 A project for assessing a person's pose. The objective of the project is to predict whether a person's pose is normal or abnormal.
 
-A project using yolov8 to evaluate a pose. A project using a custom model to test a person's pose based on points from yolov8-pose.
+A project using [yolov8](https://github.com/ultralytics/ultralytics) to evaluate a pose. A project using a custom model to test a person's pose based on points from yolov8-pose.
 
 ## Install
 ```
