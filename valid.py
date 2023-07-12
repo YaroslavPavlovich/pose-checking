@@ -7,16 +7,17 @@ import gdown
 import torch
 
 from entity.data import Data
-from models.pose_checking import PoseChecking, train_model
-from utils.create_labels import make_points, mix_data
+from models.pose_checking import predict, PoseChecking
 from models.yolo import Detector
+from utils.create_labels import make_points
 
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--yolo-model', type=str, default='yolov8s-pose.pt', help='initial weights path for yolov8')
-    parser.add_argument('--result-model', type=str, default='pose_checking.pt', help='result training weights path')
-    parser.add_argument('--dataset', type=str, default='pose/train', help='path for dataset')
+    parser.add_argument('--pose-checking-model', type=str,
+                        default='pose_checking.pt', help='result training weights path')
+    parser.add_argument('--dataset', type=str, default='pose/val', help='path for dataset')
     parser.add_argument('--labels', type=str, default='points.json', help='folder of labels with points of pose')
     parser.add_argument('--normal-frames', type=str, default='normal', help='folder of photos with normal pose')
     parser.add_argument('--not-normal-frames', type=str, default='not_normal',
@@ -25,6 +26,22 @@ def parse_arguments():
                         default='https://drive.google.com/file/d/1f60Jb8GIF4keTod3Z3yoBVc6xHrbbJ1G/view?usp=sharing',
                         help='folder of labels with not normal pose')
     return parser.parse_args()
+
+
+def count_answers(model_points: PoseChecking, array_points: []):
+    not_normal = 0
+    normal = 0
+    for points in array_points:
+        new_coord = []
+        for point in points:
+            new_coord.append(point[0])
+            new_coord.append(point[1])
+        new_coord = torch.tensor(new_coord, dtype=torch.float32)
+        if predict(model_points, new_coord):
+            normal += 1
+        else:
+            not_normal += 1
+    return normal, not_normal
 
 
 def main(opt):
@@ -45,16 +62,23 @@ def main(opt):
             json.dump(data.__dict__, f)
     with open(name_dir + '/' + opt.labels, 'r') as f:
         data = json.load(f)
-    train_data, train_labels = mix_data(data['normal_points'], data['not_normal_points'])
-    model_points = PoseChecking()
-
-    # Make tensors
-    train_data = torch.tensor(train_data, dtype=torch.float32).view(len(train_data), -1)
-    train_labels = torch.tensor(train_labels, dtype=torch.float32)
-    # Train model
-    train_model(model_points, train_data, train_labels, epochs=100)
-    model_scripted = torch.jit.script(model_points)  # Export to TorchScript
-    model_scripted.save(opt.result_model)  # Save
+    model_points = torch.jit.load(opt.pose_checking_model)
+    normal_points = data['normal_points']
+    not_normal_points = data['not_normal_points']
+    negative = 0
+    positive = 0
+    normal, not_normal = count_answers(model_points, normal_points)
+    print(normal)
+    print(not_normal)
+    positive += normal
+    negative += not_normal
+    normal, not_normal = count_answers(model_points, not_normal_points)
+    print(normal)
+    print(not_normal)
+    positive += not_normal
+    negative += normal
+    accuracy = positive / (positive + negative)
+    print('Accuracy of pose checking: ' + str(accuracy))
 
 
 if __name__ == '__main__':

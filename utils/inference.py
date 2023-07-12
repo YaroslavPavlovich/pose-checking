@@ -6,7 +6,7 @@ from models.yolo import Detector
 from utils.create_labels import normalize_points
 
 
-def inference_frame(image: np.ndarray, yolo_model: Detector, model_points: PoseChecking, visualizing: bool):
+def inference_frame(image: np.ndarray, yolo_model: Detector, model_points: PoseChecking):
     height, width, _ = image.shape
     results = yolo_model(image)
     for batch in results:
@@ -14,10 +14,10 @@ def inference_frame(image: np.ndarray, yolo_model: Detector, model_points: PoseC
             points = result.keypoints.xy.cpu()
             new_points = normalize_points(points[0], width, height)
             if predict(model_points, new_points):
+                color = (0, 255, 0)
+            else:
                 print('FOUND PERSON WITH NOT NORMAL POSE')
                 color = (0, 0, 255)
-            else:
-                color = (0, 255, 0)
             for point in points[0]:
                 x = int(point[0])
                 y = int(point[1])
@@ -30,7 +30,7 @@ def process_image(image_path: str, yolo_model: Detector, model_points: PoseCheck
     image = cv2.imread(image_path)
     if image is None:
         raise FileNotFoundError('Wrong path to the source')
-    image = inference_frame(image, yolo_model, model_points, visualizing)
+    image = inference_frame(image, yolo_model, model_points)
     if visualizing:
         cv2.imshow('result', image)
         cv2.waitKey()
@@ -60,7 +60,7 @@ def process_video(video_path: str, yolo_model: Detector, model_points: PoseCheck
         # Read frame from video
         ret, image = cap.read()
         if ret:
-            image = inference_frame(image, yolo_model, model_points, visualizing)
+            image = inference_frame(image, yolo_model, model_points)
             if visualizing:
                 cv2.imshow('result', image)
                 cv2.waitKey(20)
