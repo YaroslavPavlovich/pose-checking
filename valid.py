@@ -60,6 +60,10 @@ def main(opt):
         data = Data(normal_points, not_normal_points)
         with open(name_dir + '/' + opt.labels, 'w') as f:
             json.dump(data.__dict__, f)
+    if not os.path.isfile(opt.pose_checking_model):
+        if 'pose_checking.pt' != opt.pose_checking_model:
+            raise FileNotFoundError('No model file: ' + opt.pose_checking_model)
+        gdown.download(url=opt.dataset_url, fuzzy=True)
     with open(name_dir + '/' + opt.labels, 'r') as f:
         data = json.load(f)
     model_points = torch.jit.load(opt.pose_checking_model)

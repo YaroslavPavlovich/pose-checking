@@ -6,6 +6,7 @@ import torch
 
 from models.yolo import Detector
 from utils.inference import process_image, process_video, process_dir
+from venv.bin import gdown
 
 IMG_FORMATS = 'bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp', 'pfm'  # include image suffixes
 VID_FORMATS = 'asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'  # include video suffixes
@@ -40,6 +41,10 @@ def main(opt):
     yolo_model = Detector(opt.yolo_model)
     model_points = torch.jit.load(opt.pose_checking_model)
     source = str(opt.source)
+    if not os.path.isfile(opt.pose_checking_model):
+        if 'pose_checking.pt' != opt.pose_checking_model:
+            raise FileNotFoundError('No model file: ' + opt.pose_checking_model)
+        gdown.download(url=opt.dataset_url, fuzzy=True)
 
     is_vid = Path(source).suffix[1:] in VID_FORMATS
     is_img = Path(source).suffix[1:] in IMG_FORMATS
