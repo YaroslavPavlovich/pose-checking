@@ -25,6 +25,9 @@ def parse_arguments():
     parser.add_argument('--dataset-url', type=str,
                         default='https://drive.google.com/file/d/1f60Jb8GIF4keTod3Z3yoBVc6xHrbbJ1G/view?usp=sharing',
                         help='folder of labels with not normal pose')
+    parser.add_argument('--model-url', type=str,
+                        default='https://drive.google.com/file/d/1unmGjSGOaRRoUHrlew7DNSqwUTfxXnnO/view?usp=sharing',
+                        help='URL of pretrained model')
     return parser.parse_args()
 
 
@@ -63,7 +66,7 @@ def main(opt):
     if not os.path.isfile(opt.pose_checking_model):
         if 'pose_checking.pt' != opt.pose_checking_model:
             raise FileNotFoundError('No model file: ' + opt.pose_checking_model)
-        gdown.download(url=opt.dataset_url, fuzzy=True)
+        gdown.download(url=opt.model_url, fuzzy=True)
     with open(name_dir + '/' + opt.labels, 'r') as f:
         data = json.load(f)
     model_points = torch.jit.load(opt.pose_checking_model)

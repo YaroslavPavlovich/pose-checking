@@ -21,6 +21,9 @@ def parse_arguments():
     parser.add_argument('--result-dir', type=str, default='results', help='directory for results')
     parser.add_argument('--save-results', action='store_true', help='save results')
     parser.add_argument('--show-results', action='store_true', help='show results')
+    parser.add_argument('--model-url', type=str,
+                        default='https://drive.google.com/file/d/1unmGjSGOaRRoUHrlew7DNSqwUTfxXnnO/view?usp=sharing',
+                        help='URL of pretrained model')
     return parser.parse_args()
 
 
@@ -43,7 +46,7 @@ def main(opt):
     if not os.path.isfile(opt.pose_checking_model):
         if 'pose_checking.pt' != opt.pose_checking_model:
             raise FileNotFoundError('No model file: ' + opt.pose_checking_model)
-        gdown.download(url=opt.dataset_url, fuzzy=True)
+        gdown.download(url=opt.model_url, fuzzy=True)
     model_points = torch.jit.load(opt.pose_checking_model)
 
     is_vid = Path(source).suffix[1:] in VID_FORMATS

@@ -23,7 +23,7 @@ def parse_arguments():
                         help='folder of photos with not normal pose')
     parser.add_argument('--dataset-url', type=str,
                         default='https://drive.google.com/file/d/1f60Jb8GIF4keTod3Z3yoBVc6xHrbbJ1G/view?usp=sharing',
-                        help='folder of labels with not normal pose')
+                        help='URL of training dataset')
     return parser.parse_args()
 
 
