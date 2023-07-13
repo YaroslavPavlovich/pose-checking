@@ -2,11 +2,11 @@ import argparse
 import os
 from pathlib import Path
 
+import gdown
 import torch
 
 from models.yolo import Detector
 from utils.inference import process_image, process_video, process_dir
-from venv.bin import gdown
 
 IMG_FORMATS = 'bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp', 'pfm'  # include image suffixes
 VID_FORMATS = 'asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'  # include video suffixes
