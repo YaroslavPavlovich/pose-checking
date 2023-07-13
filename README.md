@@ -4,7 +4,7 @@ A project for assessing a person's pose. The objective of the project is to pred
 A project using [yolov8](https://github.com/ultralytics/ultralytics) to evaluate a pose. A project using a custom model to test a person's pose based on points from yolov8-pose.
 
 <div>
-    <a href="https://colab.research.google.com/github/ultralytics/ultralytics/blob/main/examples/tutorial.ipynb"><img src="https://colab.research.google.com/drive/1AzPYK9b-nV_xHuyCy2Ndc4SZzwycn8V3#scrollTo=Ts48larfN8S8" alt="Open In Colab"></a>
+    <a href="https://colab.research.google.com/drive/1AzPYK9b-nV_xHuyCy2Ndc4SZzwycn8V3#scrollTo=Ts48larfN8S8"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
 </div>
 
 ## Install
