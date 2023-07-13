@@ -54,7 +54,6 @@ def main(opt):
         name_file = gdown.download(url=opt.dataset_url, fuzzy=True)
         with zipfile.ZipFile(name_file, 'r') as zip_ref:
             zip_ref.extractall()
-        name_dir = name_file.replace('.zip', '')
     if not os.path.isfile(name_dir + '/' + opt.labels):
         # Load a model
         yolo_model = Detector(opt.yolo_model)
