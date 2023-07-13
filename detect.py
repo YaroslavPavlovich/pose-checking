@@ -39,12 +39,12 @@ def check_dir(path: str):
 
 def main(opt):
     yolo_model = Detector(opt.yolo_model)
-    model_points = torch.jit.load(opt.pose_checking_model)
     source = str(opt.source)
     if not os.path.isfile(opt.pose_checking_model):
         if 'pose_checking.pt' != opt.pose_checking_model:
             raise FileNotFoundError('No model file: ' + opt.pose_checking_model)
         gdown.download(url=opt.dataset_url, fuzzy=True)
+    model_points = torch.jit.load(opt.pose_checking_model)
 
     is_vid = Path(source).suffix[1:] in VID_FORMATS
     is_img = Path(source).suffix[1:] in IMG_FORMATS
